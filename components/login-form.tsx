@@ -169,14 +169,6 @@ export default function LoginForm() {
               />
             </div>
 
-            {isLogin && (
-              <div className="p-3 bg-blue-50 rounded text-sm text-blue-900 border border-blue-200">
-                <p className="font-semibold mb-1">Credenciales de prueba:</p>
-                <p>Cliente: cliente@milaencanto.com / cliente123</p>
-                <p>Admin: admin@milaencanto.com / admin123</p>
-              </div>
-            )}
-
             <Button type="submit" disabled={loading} className="w-full">
               {loading ? "Procesando..." : isLogin ? "Iniciar Sesión" : "Registrarse"}
             </Button>
