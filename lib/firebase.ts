@@ -30,8 +30,12 @@ try {
   const isBrowser = typeof window !== "undefined"
   const hostname = isBrowser ? window.location.hostname : undefined
   const useEmulatorEnv = typeof process !== 'undefined' && process.env.NEXT_PUBLIC_FIREBASE_EMULATOR === 'true'
+  const isDev = typeof process !== 'undefined' && (process.env.NODE_ENV === 'development' || process.env.NEXT_PUBLIC_NODE_ENV === 'development')
 
-  if (isBrowser && (hostname === "localhost" || hostname === "127.0.0.1" || useEmulatorEnv)) {
+  // For development builds we prefer emulators to avoid network issues and billing.
+  const shouldUseEmulator = isDev || useEmulatorEnv || hostname === "localhost" || hostname === "127.0.0.1"
+
+  if (isBrowser && shouldUseEmulator) {
     try {
       connectStorageEmulator(storage, "localhost", 9199)
       connectAuthEmulator(auth, "http://localhost:9099", { disableWarnings: true })
@@ -39,6 +43,7 @@ try {
       connectFirestoreEmulator(db, "localhost", 8080)
       // consola informativa para diagnóstico
       console.info('Firebase: conectado a emuladores -> storage@9199, auth@9099, firestore@8080')
+      console.info('Firebase: modo desarrollo/emulador activado (shouldUseEmulator=%s, isDev=%s, useEmulatorEnv=%s, hostname=%s)', shouldUseEmulator, isDev, useEmulatorEnv, hostname)
       console.info('Firebase config usada (sólo para diagnóstico):', {
         projectId: firebaseConfig.projectId,
         authDomain: firebaseConfig.authDomain,
