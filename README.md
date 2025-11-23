@@ -81,6 +81,34 @@ Si experimentas errores de tipo `auth/network-request-failed`, sigue estos pasos
 
 Si quieres, copia aquí el request fallido y lo reviso contigo.
 
+## Comprobación de conectividad desde el servidor
+
+He añadido un endpoint de prueba en `app/api/health/auth-test` que realiza una petición simple
+a `identitytoolkit.googleapis.com` para verificar si el servidor puede alcanzar los endpoints de
+Firebase Auth (esto evita problemas de CORS y confirma conectividad desde Node/Next).
+
+- Accede a: `http://localhost:3000/api/health/auth-test` después de levantar la app.
+- Respuesta esperada (ejemplo):
+    ```json
+    { "ok": true, "url": "https://identitytoolkit.googleapis.com", "status": 404, "durationMs": 120 }
+    ```
+
+Si la respuesta es `ok: false` o recibes un error de timeout, hay un problema de red o un firewall
+bloqueando las peticiones hacia los servicios de Google desde tu máquina.
+
+## Script para arrancar Emuladores + Dev (Windows)
+
+He añadido `scripts/dev-emulators.ps1` y un `package.json` script `dev:emulators`.
+
+- Para usarlo en PowerShell (Windows):
+```powershell
+pnpm run dev:emulators
+```
+
+Este script abre una nueva ventana con los emuladores de Firebase (auth, firestore, storage)
+y arranca la app Next.js en la ventana actual.
+
+
 ## Estructura del Proyecto
 
 - `/app`: Páginas y rutas de la aplicación (Next.js App Router).
